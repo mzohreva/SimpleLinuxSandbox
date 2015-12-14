@@ -1,0 +1,3 @@
+Features to implement:
+
+  - Enable /tmp inside the virtual environment using tmpfs
