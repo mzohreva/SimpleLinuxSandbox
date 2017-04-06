@@ -2,7 +2,7 @@
 A simple sandbox using Linux namespaces
 
 ```
-Usage: ./simple_sandbox [OPTIONS] COMMAND
+Usage: simple_sandbox [OPTIONS] COMMAND
 
 OPTIONS:
     -d         Enable debug messages
@@ -11,6 +11,13 @@ OPTIONS:
     -g gid     Run command with group gid
     -p         Mount /proc
     -s         Mount /sys
+    -m path    Mount path under /mnt/`basename path`
+    -M         Do not mount program
+
+The -m option can be repeated to mount multiple paths.
+If the -M option is not specified, the program is mounted at
+/program which is useful for programs that are not installed
+in standard locations such as /bin or /usr/bin
 ```
 
 Executes COMMAND in a virtual environment with very limited
@@ -70,15 +77,16 @@ nobody@machine:/$ id
 uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
 nobody@machine:/$
 nobody@machine:/$ ls -l
-total 1032
-drwxr-xr-x   2 root root    4096 Apr 12 13:05 bin
-drwxr-xr-x 165 root root   12288 Aug 17 13:25 etc
-drwxr-xr-x  26 root root    4096 May 26 15:02 lib
-drwxr-xr-x   2 root root    4096 May 26 15:02 lib32
-drwxr-xr-x   2 root root    4096 May 26 15:02 lib64
-dr-xr-xr-x 196 root root       0 Aug 17 15:53 proc
+total 1036
+drwxr-xr-x   2 root root    4096 Feb 10 12:52 bin
+drwxr-xr-x 165 root root   12288 Apr  3 13:48 etc
+drwxr-xr-x  26 root root    4096 Mar 27 13:39 lib
+drwxr-xr-x   2 root root    4096 Mar 27 13:38 lib32
+drwxr-xr-x   2 root root    4096 Mar 27 13:39 lib64
+drwxr-xr-x   2 root root    4096 Apr  6 15:50 mnt
+dr-xr-xr-x 210 root root       0 Apr  6 15:50 proc
 -rwxr-xr-x   1 root root 1021112 Oct  7  2014 program
-dr-xr-xr-x  13 root root       0 Aug 17 15:53 sys
-drwxr-xr-x  12 root root    4096 Apr 14 18:40 usr
+dr-xr-xr-x  13 root root       0 Apr  6 15:50 sys
+drwxr-xr-x  12 root root    4096 Apr 14  2016 usr
 nobody@machine:/$
 ```
