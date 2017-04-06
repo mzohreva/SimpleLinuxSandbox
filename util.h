@@ -8,6 +8,12 @@ namespace util
 {
     bool PathExists(std::string path);
 
+    bool IsRegularFile(std::string path);
+
+    bool IsDirectory(std::string path);
+
+    std::string BaseName(std::string path);
+
     void DeleteFile(std::string path);
 
     /* Fails if the folder is not empty */

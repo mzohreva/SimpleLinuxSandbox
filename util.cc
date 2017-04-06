@@ -10,6 +10,7 @@ extern "C" {
 #include <sys/mount.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <libgen.h>
 }
 // C++ headers
 #include <iostream>
@@ -32,6 +33,44 @@ bool util::PathExists(string path)
         return false;
     }
     return true;
+}
+
+bool util::IsRegularFile(string path)
+{
+    struct stat s;
+    int r = lstat(path.c_str(), &s);
+    if (r < 0)
+    {
+        if (errno != ENOENT)
+        {
+            throw system_error(errno, system_category(), "IsRegularFile, lstat() failed");
+        }
+        return false;   // Does not exist
+    }
+    return S_ISREG(s.st_mode);
+}
+
+bool util::IsDirectory(string path)
+{
+    struct stat s;
+    int r = lstat(path.c_str(), &s);
+    if (r < 0)
+    {
+        if (errno != ENOENT)
+        {
+            throw system_error(errno, system_category(), "IsDirectory, lstat() failed");
+        }
+        return false;   // Does not exist
+    }
+    return S_ISDIR(s.st_mode);
+}
+
+string util::BaseName(string path)
+{
+    char* copy = strdup(path.c_str());
+    string bn = basename(copy);
+    free(copy);
+    return bn;
 }
 
 void util::DeleteFile(string path)
